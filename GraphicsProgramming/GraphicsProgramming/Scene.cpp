@@ -28,6 +28,47 @@ void Scene::update(float dt)
 	calculateFPS();
 }
 
+void Scene::PushVertex(Vertex v) {
+
+	glColor3f(v.color.x, v.color.y, v.color.z);
+	glVertex3f(v.position.x,v.position.y, v.position.z);
+	
+
+}
+
+
+void Scene::drawTriangle(Vertex v1,Vertex v2,Vertex v3) {
+	glBegin(GL_TRIANGLES);
+	PushVertex(v1);
+	PushVertex(v2);
+	PushVertex(v3);
+	glEnd();
+
+
+}
+
+void Scene::drawFan(Vertex v1, Vertex v2, Vertex v3, Vertex v4, Vertex v5, Vertex v6) {
+	glBegin(GL_TRIANGLE_FAN);
+	PushVertex(v1);
+	PushVertex(v2);
+	PushVertex(v3);
+	PushVertex(v4);
+	PushVertex(v5);
+	PushVertex(v6);
+	glEnd();
+}
+
+void Scene::drawSquare(Vertex v1, Vertex v2, Vertex v3, Vertex v4,Vertex v5,Vertex v6) {
+	glBegin(GL_POLYGON);
+	PushVertex(v1);
+	PushVertex(v2);
+	PushVertex(v3);
+	PushVertex(v4);
+	PushVertex(v5);
+	PushVertex(v6);
+	glEnd();
+}
+
 void Scene::render() {
 
 	// Clear Color and Depth Buffers
@@ -38,10 +79,21 @@ void Scene::render() {
 	// Set the camera
 	gluLookAt(0.0f, 0.0f, 6.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 	
+	glPolygonMode(GL_FRONT, GL_LINE);
+
 	// Render geometry/scene here -------------------------------------
-	
 
+	Vertex v1(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
+	Vertex v2(Vector3(0.3f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
+	Vertex v3(Vector3(0.5f, 0.3f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
+	Vertex v4(Vector3(0.3f, 0.6f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
+	Vertex v5(Vector3(0.0f, 0.6f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
+	Vertex v6(Vector3(-0.2f, 0.3f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
+	//Vertex v7(Vector3(3.0f, 0.1f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
 
+	//drawTriangle(v1, v2, v3);
+	drawSquare(v1, v2, v3, v4,v5,v6);
+	//drawFan(v1, v2, v3, v4, v5, v6);
 	// End render geometry --------------------------------------
 
 	// Render text, should be last object rendered.
