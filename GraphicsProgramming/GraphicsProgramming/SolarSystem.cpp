@@ -1,43 +1,81 @@
+#include "SolarSystem.h"
 #include "Scene.h"
 
+
+;
 // Scene constructor, initilises OpenGL
 // You should add further variables to need initilised.
-Scene::Scene(Input *in)
+SolarSystem::SolarSystem(Input* in)
 {
 	// Store pointer for input class
 	input = in;
 	initialiseOpenGL();
 
 	// Other OpenGL / render setting should be applied here.
-	
+
 
 	// Initialise scene variables
-	
+
 }
 
-void Scene::handleInput(float dt)
+void SolarSystem::handleInput(float dt)
 {
 	// Handle user input
 }
 
-void Scene::update(float dt)
+void SolarSystem::update(float dt)
 {
 	// update scene related variables.
-
+	
+	rotation += speed * dt;
 	// Calculate FPS for output
 	calculateFPS();
 }
 
-void Scene::PushVertex(Vertex v) {
+void SolarSystem::PushVertex(Vertex v) {
 
 	glColor3f(v.color.x, v.color.y, v.color.z);
-	glVertex3f(v.position.x,v.position.y, v.position.z);
-	
+	glVertex3f(v.position.x, v.position.y, v.position.z);
+
 
 }
+void SolarSystem::drawCircle(GLfloat x, GLfloat y, GLfloat z, GLfloat radius, GLint numberOfSides)
+{
+	const int numberOfVertices = 55 + 2;
 
+	GLfloat twicePi = 2.0f * 3.14f;
 
-void Scene::drawTriangle(Vertex v1,Vertex v2,Vertex v3) {
+	GLfloat circleVerticesX[numberOfVertices];
+	GLfloat circleVerticesY[numberOfVertices];
+	GLfloat circleVerticesZ[numberOfVertices];
+
+	circleVerticesX[0] = x;
+	circleVerticesY[0] = y;
+	circleVerticesZ[0] = z;
+
+	for (int i = 1; i < numberOfVertices; i++)
+	{
+		circleVerticesX[i] = x + (radius * cos(i * twicePi / numberOfSides));
+		circleVerticesY[i] = y + (radius * sin(i * twicePi / numberOfSides));
+		circleVerticesZ[i] = z;
+	}
+
+	GLfloat allCircleVertices[(numberOfVertices) * 3];
+
+	for (int i = 0; i < numberOfVertices; i++)
+	{
+		allCircleVertices[i * 3] = circleVerticesX[i];
+		allCircleVertices[(i * 3) + 1] = circleVerticesY[i];
+		allCircleVertices[(i * 3) + 2] = circleVerticesZ[i];
+	}
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, allCircleVertices);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, numberOfVertices);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void SolarSystem::drawTriangle(Vertex v1, Vertex v2, Vertex v3) {
 	glBegin(GL_TRIANGLES);
 	PushVertex(v1);
 	PushVertex(v2);
@@ -46,19 +84,7 @@ void Scene::drawTriangle(Vertex v1,Vertex v2,Vertex v3) {
 
 
 }
-
-void Scene::drawFan(Vertex v1, Vertex v2, Vertex v3, Vertex v4, Vertex v5, Vertex v6) {
-	glBegin(GL_TRIANGLE_FAN);
-	PushVertex(v1);
-	PushVertex(v2);
-	PushVertex(v3);
-	PushVertex(v4);
-	PushVertex(v5);
-	PushVertex(v6);
-	glEnd();
-}
-
-void Scene::drawSquare(Vertex v1, Vertex v2, Vertex v3, Vertex v4,Vertex v5,Vertex v6) {
+void SolarSystem::drawSquare(Vertex v1, Vertex v2, Vertex v3, Vertex v4, Vertex v5, Vertex v6) {
 	glBegin(GL_POLYGON);
 	PushVertex(v1);
 	PushVertex(v2);
@@ -69,37 +95,58 @@ void Scene::drawSquare(Vertex v1, Vertex v2, Vertex v3, Vertex v4,Vertex v5,Vert
 	glEnd();
 }
 
-void Scene::render() {
+void SolarSystem::Animate() {
+
+}
+
+void SolarSystem::render() {
 
 	// Clear Color and Depth Buffers
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Reset transformations
 	glLoadIdentity();
 	// Set the camera
 	gluLookAt(0.0f, 0.0f, 6.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-	
-	glPolygonMode(GL_FRONT, GL_LINE);
+
+	//glPolygonMode(GL_FRONT, GL_LINE);
 
 	// Render geometry/scene here -------------------------------------
 
 	Vertex v1(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
-	Vertex v2(Vector3(0.3f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
-	Vertex v3(Vector3(0.5f, 0.3f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
-	Vertex v4(Vector3(0.3f, 0.6f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
-	Vertex v5(Vector3(0.0f, 0.6f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
-	Vertex v6(Vector3(-0.2f, 0.3f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
+	Vertex v2(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
+	Vertex v3(Vector3(0.5f, 1.f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
+	
+	//glTranslatef(1.0, 0.0, 0.0);
+	//glTranslatef(0.0, 1.0, 0.0);
+	//glTranslatef(-2.0, 1.0, 0.0);
+	//glTranslatef(0.0, 0.0, -4.0);
+
+	//glScalef(2, 2, 2);
+	//glScalef(0.5, 0.5, 0.5);
+	//glScalef(2, 0.5, 0.0);
+
+	
+
+	//glRotatef(rotation, 0, 1, 0);
+
+	if (input->isKeyDown('o')) {
+		
+		drawTriangle(v1, v2, v3);
+	}
+	
+	drawCircle(-2.1f, 0.1f, 0.1f, 1, 50);
 	
 	// End render geometry --------------------------------------
 
 	// Render text, should be last object rendered.
 	renderTextOutput();
-	
+
 	// Swap buffers, after all objects are rendered.
 	glutSwapBuffers();
 }
 
-void Scene::initialiseOpenGL()
+void SolarSystem::initialiseOpenGL()
 {
 	//OpenGL settings
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
@@ -115,7 +162,7 @@ void Scene::initialiseOpenGL()
 }
 
 // Handles the resize of the window. If the window changes size the perspective matrix requires re-calculation to match new window size.
-void Scene::resize(int w, int h) 
+void SolarSystem::resize(int w, int h)
 {
 	width = w;
 	height = h;
@@ -146,20 +193,20 @@ void Scene::resize(int w, int h)
 }
 
 // Calculates FPS
-void Scene::calculateFPS()
+void SolarSystem::calculateFPS()
 {
 	frame++;
 	time = glutGet(GLUT_ELAPSED_TIME);
 
 	if (time - timebase > 1000) {
-		sprintf_s(fps, "FPS: %4.2f", frame*1000.0 / (time - timebase));
+		sprintf_s(fps, "FPS: %4.2f", frame * 1000.0 / (time - timebase));
 		timebase = time;
 		frame = 0;
 	}
 }
 
 // Compiles standard output text including FPS and current mouse position.
-void Scene::renderTextOutput()
+void SolarSystem::renderTextOutput()
 {
 	// Render current mouse position and frames per second.
 	sprintf_s(mouseText, "Mouse: %i, %i", input->getMouseX(), input->getMouseY());
@@ -168,7 +215,7 @@ void Scene::renderTextOutput()
 }
 
 // Renders text to screen. Must be called last in render function (before swap buffers)
-void Scene::displayText(float x, float y, float r, float g, float b, char* string) {
+void SolarSystem::displayText(float x, float y, float r, float g, float b, char* string) {
 	// Get Lenth of string
 	int j = strlen(string);
 
@@ -194,6 +241,6 @@ void Scene::displayText(float x, float y, float r, float g, float b, char* strin
 	// Swap back to 3D rendering.
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(fov, ((float)width/(float)height), nearPlane, farPlane);
+	gluPerspective(fov, ((float)width / (float)height), nearPlane, farPlane);
 	glMatrixMode(GL_MODELVIEW);
 }

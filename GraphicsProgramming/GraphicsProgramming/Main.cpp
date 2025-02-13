@@ -11,9 +11,10 @@
 #include <gl/GLU.h>
 #include "Scene.h"
 #include "Input.h"
+#include "SolarSystem.h"
 
 // Required variables; pointer to scene and input objects. Initialise variable used in delta time calculation.
-Scene* scene;
+SolarSystem* scene;
 Input* input;
 int oldTimeSinceStart = 0;
 
@@ -177,7 +178,7 @@ int main(int argc, char **argv)
 
 	// Initialise input and scene objects.
 	input = new Input();
-	scene = new Scene(input);
+	scene = new SolarSystem(input);
 	
 	// Enter GLUT event processing cycle
 	glutMainLoop();
