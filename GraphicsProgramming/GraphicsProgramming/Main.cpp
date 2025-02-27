@@ -13,11 +13,16 @@
 #include "Input.h"
 #include "SolarSystem.h"
 #include "Light.h"
+#include "Light2.h"
+ 
+#include <cmath>  
+#include <cstdio>  
+#include <cstdlib>
 
 // Required variables; pointer to scene and input objects. Initialise variable used in delta time calculation.
 //SolarSystem* scene;
 Input* input;
-Light* scene;
+Light2* scene;
 int oldTimeSinceStart = 0;
 
 // Called when the window detects a change in size.
@@ -140,6 +145,7 @@ void processMouseButtons(int button, int state, int x, int y)
 	}
 }
 
+
 // Main entery point for application.
 // Initialises GLUT and application window.
 // Registers callback functions for handling GLUT input events
@@ -181,7 +187,7 @@ int main(int argc, char **argv)
 	// Initialise input and scene objects.
 	input = new Input();
 	//scene = new SolarSystem(input);
-	scene = new Light(input);
+	scene = new Light2(input);
 	
 	// Enter GLUT event processing cycle
 	glutMainLoop();
