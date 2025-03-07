@@ -33,8 +33,7 @@ public:
 
 	struct Vertex {
 		Vector3 position;
-		Vector3 color;
-		Vertex(Vector3 pos, Vector3 col) : position(pos), color(col) {};
+		Vertex(Vector3 pos, Vector3 col) : position(pos) {};
 	};
 	
 protected:

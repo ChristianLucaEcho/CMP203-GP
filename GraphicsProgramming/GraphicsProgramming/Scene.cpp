@@ -30,7 +30,7 @@ void Scene::update(float dt)
 
 void Scene::PushVertex(Vertex v) {
 
-	glColor3f(v.color.x, v.color.y, v.color.z);
+	
 	glVertex3f(v.position.x,v.position.y, v.position.z);
 	
 
